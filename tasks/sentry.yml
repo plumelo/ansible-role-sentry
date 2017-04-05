@@ -17,7 +17,7 @@
   register: sentry_has_virtualenv
   become_user: "{{ sentry_user }}"
 
-- name: Create virtualenv for Sentry using chosen Python
+- name: Create virtualenv for Sentry
   shell: virtualenv --python={{sentry_python}} {{sentry_path}}/env
   become_user: "{{ sentry_user }}"
   when: sentry_has_virtualenv.stat.exists == False
@@ -41,21 +41,21 @@
     - sentry.conf.py
   notify: [sentry restart]
 
-- name: Upgrade sentry
+- name: Upgrade Sentry
   shell: "SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry upgrade --noinput"
   register: sentry_upgrade
   changed_when: sentry_upgrade.rc
   become_user: "{{ sentry_user }}"
   notify: [sentry restart]
 
-- name: Collect sentry static files
+- name: Collect Sentry static files
   shell: "SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry django collectstatic --noinput"
   register: sentry_collected
   changed_when: '"0 static files" not in sentry_collected.stdout'
   become_user: "{{ sentry_user }}"
   notify: [sentry restart]
 
-- name: List users
+- name: List Sentry users
   shell: printf "from sentry.models import User \nUser.objects.all()" | SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry django shell
   changed_when: false
   when: sentry_admins|length > 0
@@ -66,3 +66,7 @@
   with_items: "{{ sentry_admins }}"
   when: '"{{item.email}}" not in sentry_listed_users.stdout'
   become_user: "{{ sentry_user }}"
+  
+- name: Add Sentry cleanup cron  
+  cron: job="SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry cleanup --days=30" minute=0 hour=0 user={{sentry_user}}
+  when: sentry_cron
