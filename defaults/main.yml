@@ -1,0 +1,15 @@
+---
+# defaults file for plumelo.sentry
+
+sentry_user: sentry
+sentry_path: "/home/{{ sentry_user }}/sentry"
+sentry_python: python2.7
+sentry_version: 8.14.1
+
+sentry_db_engine: django.db.backends.sqlite3
+sentry_db_name: "{{ sentry_path }}/sentry.sqlite"
+sentry_db_user: postgres
+sentry_db_password: ""
+sentry_db_host: ""
+sentry_db_port: ""
+sentry_db_options: {}

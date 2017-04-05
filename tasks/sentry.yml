@@ -1,0 +1,68 @@
+---
+- name: Ensure sentry user exists
+  user: name={{ sentry_user }}
+
+- name: Ensure sentry directories exists
+  become_user: "{{ sentry_user }}"
+  file: state=directory path="{{ item.path }}" owner="{{ item.owner|default(sentry_user) }}" recurse="{{ item.recurse|default(omit) }}"
+  when: item.path != ""
+  with_items:
+    - { path: "{{ sentry_path }}" }
+    - { path: "{{ sentry_path }}/_static" }
+    - { path: "{{ sentry_path }}/conf" }
+    - { path: "{{ sentry_logfile_dir| default('') }}", recurse: yes }
+
+- name: Check existince of Sentry virtualenv
+  stat: path={{ sentry_path }}/env
+  register: sentry_has_virtualenv
+  become_user: "{{ sentry_user }}"
+
+- name: Create virtualenv for Sentry using chosen Python
+  shell: virtualenv --python={{sentry_python}} {{sentry_path}}/env
+  become_user: "{{ sentry_user }}"
+  when: sentry_has_virtualenv.stat.exists == False
+
+- name: Install Sentry
+  pip: name=sentry version={{sentry_version}} virtualenv="{{ sentry_path }}/env"
+  become_user: "{{ sentry_user }}"
+  notify: [sentry restart]
+
+- name: Install extensions
+  pip: name={{ item }} virtualenv="{{ sentry_path }}/env"
+  become_user: "{{ sentry_user }}"
+  with_items: "{{ sentry_extensions | default([]) }}"
+  notify: [sentry restart]
+
+- name: Configure Sentry
+  become_user: "{{ sentry_user }}"
+  template: src=sentry/{{ item }}.j2 dest={{ sentry_path }}/conf/{{ item }} owner={{sentry_user}}
+  with_items:
+    - config.yml
+    - sentry.conf.py
+  notify: [sentry restart]
+
+- name: Upgrade sentry
+  shell: "SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry upgrade --noinput"
+  register: sentry_upgrade
+  changed_when: sentry_upgrade.rc
+  become_user: "{{ sentry_user }}"
+  notify: [sentry restart]
+
+- name: Collect sentry static files
+  shell: "SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry django collectstatic --noinput"
+  register: sentry_collected
+  changed_when: '"0 static files" not in sentry_collected.stdout'
+  become_user: "{{ sentry_user }}"
+  notify: [sentry restart]
+
+- name: List users
+  shell: printf "from sentry.models import User \nUser.objects.all()" | SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry django shell
+  changed_when: false
+  when: sentry_admins|length > 0
+  register: sentry_listed_users
+
+- name: Setup superusers
+  shell: "SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry createuser --email={{ item.email }} --password={{ item.password }} --no-input --superuser || true"
+  with_items: "{{ sentry_admins }}"
+  when: '"{{item.email}}" not in sentry_listed_users.stdout'
+  become_user: "{{ sentry_user }}"

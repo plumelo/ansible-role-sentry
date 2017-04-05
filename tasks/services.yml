@@ -1,0 +1,14 @@
+---
+- name: Configure Services with Systemd
+  template: src=etc/systemd/system/{{ item }}.j2 dest=/etc/systemd/system/{{ item }}
+  with_items:
+  - sentry-web.service
+  - sentry-worker.service
+  - sentry-cron.service
+
+- name: Enable Services with Systemd
+  systemd: name={{ item }} daemon-reload=yes enabled=yes state=started
+  with_items:
+  - sentry-web.service
+  - sentry-worker.service
+  - sentry-cron.service

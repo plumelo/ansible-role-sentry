@@ -1,0 +1,10 @@
+---
+# tasks file for plumelo.sentry
+- include: install.yml
+  tags: [sentry, sentry-install]
+
+- include: sentry.yml
+  tags: [sentry]
+
+- include: services.yml
+  tags: [sentry, sentry-services]

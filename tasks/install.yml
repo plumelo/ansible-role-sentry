@@ -1,0 +1,17 @@
+---
+- name: sentry-install | Install dependencies
+  apt: name={{item}}
+  with_items:
+    - libxml2-dev
+    - libxslt1-dev
+    - zlib1g-dev
+    - libffi-dev
+    - libssl-dev
+    - libtiff5-dev
+    - libjpeg8-dev
+    - libpq-dev
+    - python-setuptools
+    - python-dev
+    - python-pip
+    - python-virtualenv
+    - acl

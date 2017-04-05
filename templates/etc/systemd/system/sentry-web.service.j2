@@ -1,0 +1,20 @@
+[Unit]
+Description=Sentry Main Service
+After=network.target
+Requires=sentry-worker.service
+Requires=sentry-cron.service
+
+[Service]
+Type=simple
+User={{ sentry_user }}
+Group={{ sentry_user }}
+WorkingDirectory={{ sentry_path }}
+Environment=SENTRY_CONF={{ sentry_path }}/conf
+ExecStart={{ sentry_path }}/env/bin/sentry run web
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+
+[Install]
+WantedBy=multi-user.target
