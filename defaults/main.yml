@@ -1,5 +1,4 @@
 ---
-# defaults file for plumelo.sentry
 
 sentry_user: sentry
 sentry_path: "/home/{{ sentry_user }}/sentry"
