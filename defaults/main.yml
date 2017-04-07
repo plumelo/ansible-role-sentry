@@ -6,7 +6,7 @@ sentry_python: python2.7
 sentry_version: 8.14.1
 sentry_cron: no
 sentry_extensions: []
-
+sentry_admins: []
 # Database
 sentry_db_engine: django.db.backends.sqlite3
 sentry_db_name: "{{ sentry_path }}/sentry.sqlite"
