@@ -7,6 +7,8 @@ sentry_version: '8.15'
 sentry_cron: no
 sentry_extensions: []
 sentry_admins: []
+sentry_auth_register: no
+
 # Database
 sentry_db_engine: django.db.backends.sqlite3
 sentry_db_name: "{{ sentry_path }}/sentry.sqlite"
@@ -31,6 +33,7 @@ sentry_mail_reply_hostname: ''
 sentry_secret: 'o1)o+_pjl+^ut@-2w^h)suwy#&*c@32m(%l%qg4sfg!h5!19d1'
 
 # Web
+sentry_ssl: no
 sentry_web_host: 0.0.0.0
 sentry_web_port: 9000
 sentry_web_options: { workers: 3, limit_request_line: 0, secure_scheme_headers: {'X-FORWARDED-PROTO': 'https'} }

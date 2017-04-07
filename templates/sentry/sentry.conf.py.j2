@@ -113,6 +113,10 @@ SENTRY_TSDB = 'sentry.tsdb.redis.RedisTSDB'
 
 SENTRY_DIGESTS = 'sentry.digests.backends.redis.RedisBackend'
 
+{% if not sentry_auth_register %}
+SENTRY_FEATURES['auth:register'] = False
+{% endif %}
+
 ##############
 # Web Server #
 ##############
@@ -122,6 +126,12 @@ SENTRY_DIGESTS = 'sentry.digests.backends.redis.RedisBackend'
 # SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 # SESSION_COOKIE_SECURE = True
 # CSRF_COOKIE_SECURE = True
+{% if sentry_ssl %}
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+USE_X_FORWARDED_HOST = True
+SESSION_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = True
+{% endif %}
 
 # If you're not hosting at the root of your web server,
 # you need to uncomment and set it to the path where Sentry is hosted.
@@ -129,7 +139,4 @@ SENTRY_DIGESTS = 'sentry.digests.backends.redis.RedisBackend'
 
 SENTRY_WEB_HOST = '{{ sentry_web_host }}'
 SENTRY_WEB_PORT = {{ sentry_web_port }}
-SENTRY_WEB_OPTIONS = {
-    # 'workers': 3,  # the number of web workers
-    # 'protocol': 'uwsgi',  # Enable uwsgi protocol instead of http
-}
+SENTRY_WEB_OPTIONS ={{ sentry_web_options|to_nice_json }}
