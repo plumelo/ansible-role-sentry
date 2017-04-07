@@ -7,20 +7,20 @@
 # Mail Server #
 ###############
 
-mail.backend: 'smtp'  # Use dummy if you want to disable email entirely
-# mail.host: 'localhost'
-# mail.port: 25
-# mail.username: ''
-# mail.password: ''
-# mail.use-tls: false
+mail.backend: '{{ sentry_mail_backend }}'  # Use dummy if you want to disable email entirely
+mail.host: '{{ sentry_mail_host }}'
+mail.port: {{ sentry_mail_port }}
+mail.username: '{{ sentry_mail_user }}'
+mail.password: '{{ sentry_mail_password }}'
+mail.use-tls: {{'true' if sentry_mail_use_tls else 'false' }}
 # The email address to send on behalf of
-# mail.from: 'root@localhost'
+mail.from: '{{ sentry_mail_from }}'
 
 # If you'd like to configure email replies, enable this.
-# mail.enable-replies: false
+mail.enable-replies: {{ 'true' if sentry_mail_replies else 'false' }}
 
 # When email-replies are enabled, this value is used in the Reply-To header
-# mail.reply-hostname: ''
+mail.reply-hostname: '{{ sentry_mail_reply_hostname  }}'
 
 # If you're using mailgun for inbound mail, set your API key and configure a
 # route to forward to /api/hooks/mailgun/inbound/
@@ -33,7 +33,7 @@ mail.backend: 'smtp'  # Use dummy if you want to disable email entirely
 # If this file ever becomes compromised, it's important to regenerate your a new key
 # Changing this value will result in all current sessions being invalidated.
 # A new key can be generated with `$ sentry config generate-secret-key`
-system.secret-key: 'o1)o+_pjl+^ut@-2w^h)suwy#&*c@32m(%l%qg4sfg!h5!19d1'
+system.secret-key: '{{ sentry_secret }}'
 
 # The ``redis.clusters`` setting is used, unsurprisingly, to configure Redis
 # clusters. These clusters can be then referred to by name when configuring

@@ -3,7 +3,7 @@
 sentry_user: sentry
 sentry_path: "/home/{{ sentry_user }}/sentry"
 sentry_python: python2.7
-sentry_version: 8.14.1
+sentry_version: '8.15'
 sentry_cron: no
 sentry_extensions: []
 sentry_admins: []
@@ -15,6 +15,20 @@ sentry_db_password: ""
 sentry_db_host: ""
 sentry_db_port: ""
 sentry_db_options: {}
+
+#Mail
+sentry_mail_backend: smtp
+sentry_mail_host: localhost
+sentry_mail_port: 25
+sentry_mail_user: ''
+sentry_mail_password: ''
+sentry_mail_use_tls: no
+sentry_mail_from: 'root@localhost'
+sentry_mail_replies: no
+sentry_mail_reply_hostname: ''
+
+# Security
+sentry_secret: 'o1)o+_pjl+^ut@-2w^h)suwy#&*c@32m(%l%qg4sfg!h5!19d1'
 
 # Web
 sentry_web_host: 0.0.0.0
