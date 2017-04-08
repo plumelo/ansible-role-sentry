@@ -64,7 +64,7 @@
 - name: Setup superusers
   shell: "SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry createuser --email={{ item.email }} --password={{ item.password }} --no-input --superuser || true"
   with_items: "{{ sentry_admins }}"
-  when: '"{{item.email}}" not in sentry_listed_users.stdout'
+  when: '"{{ item.email }}" not in sentry_listed_users.stdout'
   become_user: "{{ sentry_user }}"
   
 - name: Add Sentry cleanup cron  
