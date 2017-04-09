@@ -9,6 +9,7 @@
   with_items:
     - { path: "{{ sentry_path }}" }
     - { path: "{{ sentry_path }}/_static" }
+    - { path: "{{ sentry_path }}/_files" }
     - { path: "{{ sentry_path }}/conf" }
     - { path: "{{ sentry_logfile_dir| default('') }}", recurse: yes }
 
