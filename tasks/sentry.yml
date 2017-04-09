@@ -58,13 +58,13 @@
 - name: List Sentry users
   shell: printf "from sentry.models import User \nUser.objects.all()" | SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry django shell
   changed_when: false
-  when: sentry_admins|length > 0
+  when: sentry_users|length > 0
   register: sentry_listed_users
 
 - name: Setup superusers
-  shell: "SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry createuser --email={{ item.email }} --password={{ item.password }} --no-input --superuser || true"
-  with_items: "{{ sentry_admins }}"
+  shell: "SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry createuser --email={{ item.email }} --password={{ item.password }} --no-input {{ '--superuser' if item.superuser else ''}} || true"
   when: '"{{ item.email }}" not in sentry_listed_users.stdout'
+  with_items: "{{ sentry_users }}"
   become_user: "{{ sentry_user }}"
   
 - name: Add Sentry cleanup cron  

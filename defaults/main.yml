@@ -6,7 +6,7 @@ sentry_python: python2.7
 sentry_version: '8.15'
 sentry_cron: no
 sentry_extensions: []
-sentry_admins: []
+sentry_users: []
 sentry_auth_register: no
 
 # Database
