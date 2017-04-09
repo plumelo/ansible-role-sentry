@@ -5,6 +5,7 @@ from sentry.conf.server import *
 import os.path
 
 CONF_ROOT = os.path.dirname(__file__)
+STATIC_ROOT = '{{ sentry_path }}/_static'
 
 DATABASES = {
     'default': {
