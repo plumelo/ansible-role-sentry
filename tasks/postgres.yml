@@ -6,7 +6,7 @@
     - python-psycopg2
   tags:
     - postgres
-    
+
 - name: Create database user
   postgresql_user:
     name: '{{ sentry_db_user }}'
@@ -23,5 +23,19 @@
   postgresql_db: name={{ sentry_db_name }} owner={{ sentry_db_user }}
   become: yes
   become_user: postgres
+  register: sentry_db_status
   tags:
     - postgres
+
+- name: Copy import database
+  copy: src="{{ sentry_db_import }}" dest=/home/{{ sentry_user }}/sentry.sql mode="0775"
+  become: yes
+  become_user: '{{ sentry_user }}'
+  when: sentry_db_status.changed and sentry_db_import is defined
+  register: sentry_db_import_status
+
+- name: Import database
+  shell: psql {{sentry_db_name}} < /home/{{ sentry_user }}/sentry.sql
+  become: yes
+  become_user: postgres
+  when: sentry_db_import_status.changed
