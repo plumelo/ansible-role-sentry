@@ -31,7 +31,7 @@ sentry_mail_replies: no
 sentry_mail_reply_hostname: ''
 
 # Security
-sentry_secret: 'o1)o+_pjl+^ut@-2w^h)suwy#&*c@32m(%l%qg4sfg!h5!19d1'
+sentry_secret: '--sentry-secret-'
 
 # Web
 sentry_ssl: no
