@@ -1,16 +1,16 @@
---
+---
 - name: Install postgresql
   apt: pkg='{{ item }}'
   with_items:
     - postgresql
-    - psycopg2
+    - python-psycopg2
   tags:
     - postgres
     
 - name: Create database user
   postgresql_user:
-    name: {{ sentry_db_user }}
-    password: {{ sentry_db_password }}
+    name: '{{ sentry_db_user }}'
+    password: '{{ sentry_db_password }}'
     encrypted: yes
     state: present
     fail_on_user: no
