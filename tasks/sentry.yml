@@ -66,5 +66,5 @@
   become_user: "{{ sentry_user }}"
 
 - name: Add Sentry cleanup cron
-  cron: job="SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry cleanup --days=30" minute=0 hour=0 user={{sentry_user}}
+  cron: name="sentry" job="SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry cleanup --days=30" minute=0 hour=0 user={{sentry_user}}
   when: sentry_cron
