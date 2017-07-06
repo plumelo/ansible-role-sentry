@@ -19,6 +19,9 @@ sentry_db_host: ""
 sentry_db_port: ""
 sentry_db_options: {}
 
+#Redis
+sentry_redis_install: yes
+
 #Mail
 sentry_mail_backend: smtp
 sentry_mail_host: localhost
