@@ -1,7 +1,4 @@
 ---
-- name: Ensure sentry user exists
-  user: name={{ sentry_user }}
-
 - name: Ensure sentry directories exists
   become_user: "{{ sentry_user }}"
   file: state=directory path="{{ item.path }}" owner="{{ item.owner|default(sentry_user) }}" recurse="{{ item.recurse|default(omit) }}"
@@ -67,7 +64,7 @@
   when: '"{{ item.email }}" not in sentry_listed_users.stdout'
   with_items: "{{ sentry_users }}"
   become_user: "{{ sentry_user }}"
-  
-- name: Add Sentry cleanup cron  
+
+- name: Add Sentry cleanup cron
   cron: job="SENTRY_CONF={{ sentry_path }}/conf {{ sentry_path }}/env/bin/sentry cleanup --days=30" minute=0 hour=0 user={{sentry_user}}
   when: sentry_cron

@@ -15,3 +15,6 @@
     - python-pip
     - python-virtualenv
     - acl
+
+- name: Ensure sentry user exists
+  user: name={{ sentry_user }}
