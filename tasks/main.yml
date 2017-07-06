@@ -3,6 +3,10 @@
 - include: install.yml
   tags: [sentry, sentry-install]
 
+- include: postgres.yml
+  tags: [sentry, sentry-database]
+  when: sentry_db_engine == 'sentry.db.postgres' and sentry_install_db
+
 - include: sentry.yml
   tags: [sentry]
 

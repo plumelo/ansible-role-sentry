@@ -10,6 +10,7 @@ sentry_users: []
 sentry_auth_register: no
 
 # Database
+sentry_db_install: yes
 sentry_db_engine: django.db.backends.sqlite3
 sentry_db_name: "{{ sentry_path }}/sentry.sqlite"
 sentry_db_user: postgres
