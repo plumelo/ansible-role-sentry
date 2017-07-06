@@ -6,11 +6,11 @@
 - include: postgres.yml
   tags: [sentry, sentry-database]
   when: sentry_db_engine == 'sentry.db.postgres' and sentry_db_install
-  
+
 - include: redis.yml
   tags: [sentry, sentry-redis]
   when:  sentry_redis_install
-  
+
 - include: sentry.yml
   tags: [sentry]
 
