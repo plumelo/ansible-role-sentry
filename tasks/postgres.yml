@@ -1,6 +1,8 @@
 ---
+
 - name: Install postgresql
-  apt: pkg='{{ item }}'
+  apt:
+    pkg: '{{ item }}'
   with_items:
     - postgresql
     - python-psycopg2
@@ -11,31 +13,36 @@
   postgresql_user:
     name: '{{ sentry_db_user }}'
     password: '{{ sentry_db_password }}'
-    encrypted: yes
+    encrypted: true
     state: present
-    fail_on_user: no
-  become: yes
+    fail_on_user: false
+  become: true
   become_user: postgres
   tags:
     - postgres
 
 - name: Create database
-  postgresql_db: name={{ sentry_db_name }} owner={{ sentry_db_user }}
-  become: yes
+  postgresql_db:
+    name: '{{ sentry_db_name }}'
+    owner: '{{ sentry_db_user }}'
+  become: true
   become_user: postgres
   register: sentry_db_status
   tags:
     - postgres
 
 - name: Copy import database
-  copy: src="{{ sentry_db_import }}" dest=/home/{{ sentry_user }}/sentry.sql mode="0775"
-  become: yes
+  copy:
+    src: '{{ sentry_db_import }}'
+    dest: /home/{{ sentry_user }}/sentry.sql
+    mode: "0775"
+  become: true
   become_user: '{{ sentry_user }}'
   when: sentry_db_status.changed and sentry_db_import is defined
   register: sentry_db_import_status
 
 - name: Import database
   shell: psql {{sentry_db_name}} < /home/{{ sentry_user }}/sentry.sql
-  become: yes
+  become: true
   become_user: postgres
   when: sentry_db_import_status.changed

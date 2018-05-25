@@ -1,6 +1,9 @@
 ---
+
 - name: sentry restart
-  systemd: name={{item}} state=restarted
+  systemd:
+    name: '{{ item }}'
+    state: restarted
   with_items:
     - sentry-web.service
     - sentry-worker.service

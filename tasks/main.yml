@@ -1,18 +1,19 @@
 ---
+
 # tasks file for plumelo.sentry
-- include: install.yml
+- import_tasks: install.yml
   tags: [sentry, sentry-install]
 
-- include: postgres.yml
+- import_tasks: postgres.yml
   tags: [sentry, sentry-database]
   when: sentry_db_engine == 'sentry.db.postgres' and sentry_db_install
 
-- include: redis.yml
+- import_tasks: redis.yml
   tags: [sentry, sentry-redis]
-  when:  sentry_redis_install
+  when: sentry_redis_install
 
-- include: sentry.yml
+- import_tasks: sentry.yml
   tags: [sentry]
 
-- include: services.yml
+- import_tasks: services.yml
   tags: [sentry, sentry-services]

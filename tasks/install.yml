@@ -1,6 +1,8 @@
 ---
+
 - name: sentry-install | Install dependencies
-  apt: name={{item}}
+  apt:
+    name: '{{ item }}'
   with_items:
     - libxml2-dev
     - libxslt1-dev
@@ -17,4 +19,5 @@
     - acl
 
 - name: Ensure sentry user exists
-  user: name={{ sentry_user }}
+  user:
+    name: '{{ sentry_user }}'

@@ -1,0 +1,16 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure('2') do |config|
+  config.vm.hostname = 'sentry'
+  config.vm.box = 'plumelo/xenial64'
+
+  config.vm.provider :lxc do |lxc|
+    lxc.container_name = 'sentry'
+  end
+
+  config.vm.provision 'ansible' do |ansible|
+    ansible.playbook = 'test.yml'
+    ansible.extra_vars = { ansible_python_interpreter: '/usr/bin/python3' }
+  end
+end

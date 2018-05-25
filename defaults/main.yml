@@ -1,43 +1,44 @@
 ---
 
 sentry_user: sentry
-sentry_path: "/home/{{ sentry_user }}/sentry"
+sentry_path: '/home/{{ sentry_user }}/sentry'
 sentry_python: python2.7
-sentry_version: '8.15'
-sentry_cron: no
+sentry_version: '8.22'
+sentry_cron: false
 sentry_extensions: []
 sentry_users: []
-sentry_auth_register: no
+sentry_auth_register: false
 
 # Database
-sentry_db_install: yes
+sentry_db_install: true
 sentry_db_engine: django.db.backends.sqlite3
-sentry_db_name: "{{ sentry_path }}/sentry.sqlite"
+sentry_db_name: '{{ sentry_path }}/sentry.sqlite'
 sentry_db_user: postgres
 sentry_db_password: ""
 sentry_db_host: ""
 sentry_db_port: ""
 sentry_db_options: {}
 
-#Redis
-sentry_redis_install: yes
+# Redis
+sentry_redis_install: true
 
-#Mail
+# Mail
 sentry_mail_backend: smtp
 sentry_mail_host: localhost
 sentry_mail_port: 25
 sentry_mail_user: ''
 sentry_mail_password: ''
-sentry_mail_use_tls: no
+sentry_mail_use_tls: false
 sentry_mail_from: 'root@localhost'
-sentry_mail_replies: no
+sentry_mail_replies: false
 sentry_mail_reply_hostname: ''
 
 # Security
 sentry_secret: '--sentry-secret-'
 
 # Web
-sentry_ssl: no
+sentry_ssl: false
 sentry_web_host: 0.0.0.0
 sentry_web_port: 9000
-sentry_web_options: { workers: 3, limit_request_line: 0, secure_scheme_headers: {'X-FORWARDED-PROTO': 'https'} }
+# yamllint disable-line rule:line-length
+sentry_web_options: {workers: 3, limit_request_line: 0, secure_scheme_headers: {'X-FORWARDED-PROTO': 'https'}}

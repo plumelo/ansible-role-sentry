@@ -1,5 +1,29 @@
 ---
-- name: Install redis
-  apt: pkg='{{ item }}'
-  with_items:
-    - redis-server
+
+- name: Apt install redis-server
+  apt:
+    name: redis-server
+    update_cache: true
+  register: apt_redis_result
+  ignore_errors: true
+
+- name: Modify redis.config
+  lineinfile:
+    path: /etc/systemd/system/redis.service
+    regexp: PrivateDevices=yes
+    line: PrivateDevices=no
+  when: apt_redis_result.failed|default(false)
+
+- name: Modify redis.config second
+  lineinfile:
+    path: /etc/systemd/system/redis.service
+    regexp: ProtectHome=yes
+    line: ProtectHome=no
+  when: apt_redis_result.failed|default(false)
+
+- name: Start redis service
+  systemd:
+    daemon_reload: true
+    enabled: true
+    state: started
+    name: redis.service

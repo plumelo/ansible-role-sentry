@@ -1,0 +1,4 @@
+.vagrant
+*.retry
+tests/roles/*
+!tests/roles/plumelo.sentry
